@@ -14,14 +14,36 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [lastChecked, setLastChecked] = useState<Date>(new Date());
 
+  const isIpAddress = (str: string) => {
+    // Simple IP validation regex
+    return /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(str);
+  };
+
   const checkStatus = async () => {
     const startTime = performance.now();
     try {
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`http://${target}`)}`;
+      let proxyUrl;
+      if (isIpAddress(target)) {
+        // For IP addresses, try HTTPS first, then HTTP
+        proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://${target}`)}`;
+      } else {
+        // For domains, use HTTP by default
+        proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`http://${target}`)}`;
+      }
+
       const response = await fetch(proxyUrl);
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // If HTTPS fails for IP, try HTTP
+        if (isIpAddress(target) && response.status === 400) {
+          const httpProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`http://${target}`)}`;
+          const httpResponse = await fetch(httpProxyUrl);
+          if (!httpResponse.ok) {
+            throw new Error(`HTTP error! status: ${httpResponse.status}`);
+          }
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       }
 
       const endTime = performance.now();
