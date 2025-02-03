@@ -1,19 +1,13 @@
-import { useState } from "react";
 import { StatusCard } from "@/components/StatusCard";
-import { AddTargetForm } from "@/components/AddTargetForm";
 
 const Index = () => {
-  const [targets, setTargets] = useState<string[]>([]);
-
-  const handleAddTarget = (target: string) => {
-    if (!targets.includes(target)) {
-      setTargets([...targets, target]);
-    }
-  };
-
-  const handleDeleteTarget = (target: string) => {
-    setTargets(targets.filter((t) => t !== target));
-  };
+  // Hardcoded list of targets to monitor
+  const targets = [
+    "google.com",
+    "github.com",
+    "8.8.8.8", // Google DNS
+    "1.1.1.1"  // Cloudflare DNS
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -21,25 +15,17 @@ const Index = () => {
         <div className="space-y-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold mb-4">Status Monitor</h1>
-            <p className="text-gray-600">Monitor your websites and IP addresses in real-time</p>
+            <p className="text-gray-600">Monitoring system status in real-time</p>
           </div>
-
-          <AddTargetForm onAdd={handleAddTarget} />
 
           <div className="grid gap-6">
             {targets.map((target) => (
               <StatusCard
                 key={target}
                 target={target}
-                onDelete={handleDeleteTarget}
+                onDelete={() => {}} // Empty function since deletion is not needed
               />
             ))}
-            
-            {targets.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
-                No targets being monitored. Add a website or IP address above to get started.
-              </div>
-            )}
           </div>
         </div>
       </div>
