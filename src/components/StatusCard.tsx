@@ -17,7 +17,6 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
   const checkStatus = async () => {
     const startTime = performance.now();
     try {
-      // Using allorigins.win as a more reliable CORS proxy
       const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
       const response = await fetch(proxyUrl);
       
@@ -38,7 +37,7 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
 
   useEffect(() => {
     checkStatus();
-    const interval = setInterval(checkStatus, 30000); // Check every 30 seconds
+    const interval = setInterval(checkStatus, 10000); // Check every 10 seconds
     return () => clearInterval(interval);
   }, [target]);
 
