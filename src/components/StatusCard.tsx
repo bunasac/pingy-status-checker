@@ -17,16 +17,11 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
   const checkStatus = async () => {
     const startTime = performance.now();
     try {
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`http://${target}`)}`;
       const response = await fetch(proxyUrl);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      if (!data || !data.contents) {
-        throw new Error('Invalid response format');
       }
 
       const endTime = performance.now();
