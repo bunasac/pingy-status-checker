@@ -17,16 +17,19 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
   const checkStatus = async () => {
     const startTime = performance.now();
     try {
-      const response = await fetch(`https://cors-anywhere.herokuapp.com/${target}`, {
-        mode: "cors",
-        headers: {
-          "Origin": window.location.origin
-        }
-      });
+      // Using allorigins.win as a more reliable CORS proxy
+      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+      const response = await fetch(proxyUrl);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const endTime = performance.now();
       setResponseTime(Math.round(endTime - startTime));
-      setStatus(response.ok ? "online" : "offline");
+      setStatus("online");
     } catch (error) {
+      console.error("Error checking status:", error);
       setStatus("offline");
       setResponseTime(null);
     }
