@@ -24,6 +24,11 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
+      const data = await response.json();
+      if (!data || !data.contents) {
+        throw new Error('Invalid response format');
+      }
+
       const endTime = performance.now();
       setResponseTime(Math.round(endTime - startTime));
       setStatus("online");
