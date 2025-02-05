@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,9 +8,10 @@ import { toast } from "sonner";
 interface StatusCardProps {
   target: string;
   onDelete: (target: string) => void;
+  alias?: string;
 }
 
-export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
+export const StatusCard = ({ target, onDelete, alias }: StatusCardProps) => {
   const [status, setStatus] = useState<"online" | "offline" | "pending">("pending");
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [lastChecked, setLastChecked] = useState<Date>(new Date());
@@ -81,7 +83,7 @@ export const StatusCard = ({ target, onDelete }: StatusCardProps) => {
                 : "bg-status-pending"
             }`}
           />
-          <h3 className="text-lg font-semibold">{target}</h3>
+          <h3 className="text-lg font-semibold">{alias || target}</h3>
         </div>
         <Button variant="ghost" size="icon" onClick={handleDelete}>
           <Trash2 className="h-4 w-4" />

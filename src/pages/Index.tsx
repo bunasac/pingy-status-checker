@@ -1,12 +1,13 @@
+
 import { StatusCard } from "@/components/StatusCard";
 
 const Index = () => {
-  // Hardcoded list of targets to monitor
+  // Hardcoded list of targets to monitor with aliases
   const targets = [
-    "google.com",
-    "github.com",
-    "8.8.8.8", // Google DNS
-    "1.1.1.1"  // Cloudflare DNS
+    { target: "google.com", alias: "Google" },
+    { target: "github.com", alias: "GitHub" },
+    { target: "8.8.8.8", alias: "Google DNS" },
+    { target: "1.1.1.1", alias: "Cloudflare DNS" }
   ];
 
   return (
@@ -21,8 +22,9 @@ const Index = () => {
           <div className="grid gap-6">
             {targets.map((target) => (
               <StatusCard
-                key={target}
-                target={target}
+                key={target.target}
+                target={target.target}
+                alias={target.alias}
                 onDelete={() => {}} // Empty function since deletion is not needed
               />
             ))}
